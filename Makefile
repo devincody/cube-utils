@@ -13,7 +13,11 @@ CUBEPROTESTS = $(patsubst %.bfb, %.resultpro, $(TESTFILES)) $(patsubst %.bfb, %.
 CUBEXTESTS = $(patsubst %.bfb, %.resultx, $(TESTFILES)) $(patsubst %.bfb, %.result.decodex, $(TESTFILES))
 TESTOUTPUTS = $(CUBEPROTESTS) $(CUBEXTESTS)
 
-.PHONY: default all clean test
+ifeq ($(PREFIX),)
+    PREFIX := /usr/local
+endif
+
+.PHONY: default all clean test install
 
 all: $(TARGETS)
 
@@ -52,6 +56,9 @@ test: test_clean $(TARGETS) $(TESTOUTPUTS)
 
 test_clean:
 	-rm -f tests/*.result*
+
+install:
+	cp $(TARGETS) $(PREFIX)/bin/
 
 clean: test_clean
 	-rm -f *.o
